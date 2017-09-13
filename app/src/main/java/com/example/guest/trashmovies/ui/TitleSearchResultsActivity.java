@@ -7,9 +7,11 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.guest.trashmovies.R;
+import com.example.guest.trashmovies.models.Movie;
 import com.example.guest.trashmovies.service.MovieService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,7 +24,7 @@ public class TitleSearchResultsActivity extends AppCompatActivity {
     @Bind(R.id.titleTextView) TextView mTitleTextView;
     public static final String TAG = TitleSearchResultsActivity.class.getSimpleName();
 
-
+    public ArrayList<Movie> mMovies = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +49,13 @@ public class TitleSearchResultsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, Response response) {
                 try {
                     String jsonData = response.body().string();
-                    Log.v(TAG, jsonData);
+                    if (response.isSuccessful()) {
+                        Log.v(TAG, jsonData);
+                        mMovies = movieService.processResults(response);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
