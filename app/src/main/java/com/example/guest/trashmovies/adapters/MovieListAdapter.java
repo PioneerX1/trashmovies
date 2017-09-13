@@ -20,6 +20,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHolder> {
+    private static final int MAX_WIDTH = 200;
+    private static final int MAX_HEIGHT = 200;
+
     public static final String TAG = MovieListAdapter.class.getSimpleName();
     private ArrayList<Movie> mMovies = new ArrayList<>();
     private Context mContext;
@@ -61,7 +64,11 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
         public void bindMovie(Movie movie){
             Log.d(TAG, movie.getPosterLink());
-            Picasso.with(mContext).load(movie.getPosterLink()).into(mMovieImageView);
+            Picasso.with(mContext)
+                    .load(movie.getPosterLink())
+                    .resize(MAX_WIDTH, MAX_HEIGHT)
+                    .centerCrop()
+                    .into(mMovieImageView);
             mMovieTitleTextView.setText(movie.getTitle());
             mMovieReleaseDateTextView.setText(movie.getReleaseDate());
         }
