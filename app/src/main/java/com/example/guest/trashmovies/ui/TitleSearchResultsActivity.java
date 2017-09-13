@@ -3,12 +3,15 @@ package com.example.guest.trashmovies.ui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.guest.trashmovies.R;
+import com.example.guest.trashmovies.adapters.MovieListAdapter;
 import com.example.guest.trashmovies.models.Movie;
 import com.example.guest.trashmovies.service.MovieService;
 
@@ -22,10 +25,9 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class TitleSearchResultsActivity extends AppCompatActivity {
-    @Bind(R.id.searchResultsTextView) TextView mTitleTextView;
-    @Bind(R.id.movieListView) ListView mMovieListView;
     public static final String TAG = TitleSearchResultsActivity.class.getSimpleName();
-
+    @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
+    private MovieListAdapter mAdapter;
     public ArrayList<Movie> mMovies = new ArrayList<>();
 
     @Override
@@ -36,7 +38,6 @@ public class TitleSearchResultsActivity extends AppCompatActivity {
 
         Intent oldIntent = getIntent();
         final String title = oldIntent.getStringExtra("title");
-        mTitleTextView.setText(title);
 
         getMovies(title);
     }
@@ -57,21 +58,13 @@ public class TitleSearchResultsActivity extends AppCompatActivity {
                 TitleSearchResultsActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        String[] movieNames = new String[mMovies.size()];
-                        for (int i = 0; i < movieNames.length; i++){
-                            movieNames[i] = mMovies.get(i).getTitle();
+                            mAdapter = new MovieListAdapter(getApplicationContext(), mMovies);
+                            mRecyclerView.setAdapter(mAdapter);
+                            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager
+                                    (TitleSearchResultsActivity.this);
+                            mRecyclerView.setLayoutManager(layoutManager);
+                            mRecyclerView.setHasFixedSize(true);
                         }
-                        ArrayAdapter adapter = new ArrayAdapter(TitleSearchResultsActivity.this, android.R.layout
-                                .simple_expandable_list_item_1, movieNames);
-                        mMovieListView.setAdapter(adapter);
-
-                        for(Movie movie : mMovies){
-                            Log.d(TAG, "Title " + movie.getTitle());
-                            Log.d(TAG, "PosterLink " + movie.getPosterLink());
-                            Log.d(TAG, "ReleaseDate " + movie.getReleaseDate());
-                        }
-
-                    }
                 });
             }
         });

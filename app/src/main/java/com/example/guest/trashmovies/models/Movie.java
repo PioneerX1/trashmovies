@@ -9,7 +9,7 @@ public class Movie {
 
     public Movie(String title, String posterLink, String releaseDate) {
         this.mTitle = title;
-        this.mPosterLink = posterLink;
+        this.mPosterLink = "https://image.tmdb.org/t/p/w640" + posterLink;
         this.mReleaseDate = releaseDate;
     }
 
