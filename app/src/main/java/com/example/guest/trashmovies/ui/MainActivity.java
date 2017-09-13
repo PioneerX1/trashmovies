@@ -1,4 +1,4 @@
-package com.example.guest.trashmovies;
+package com.example.guest.trashmovies.ui;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.guest.trashmovies.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
